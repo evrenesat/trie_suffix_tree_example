@@ -4,7 +4,7 @@
 """
 from collections import defaultdict
 
-from debe import DeBe, TrieIndex
+from debe import DeBe
 
 
 class Person:
@@ -28,9 +28,24 @@ class Person:
     def __repr__(self):
         return '%s %s' % (self.data['name'], self.data['email_set'])
 
+    def get_groups(self):
+        return self.data['group_set']
+
     def add(self, **kwargs):
         """
-        handles assignment of multiple or singular properties
+        Handles assignment of multiple or singular properties
+
+        Keyword Args:
+            name (str): Person's name
+            last_name (str): Person's last name
+            email (str): Person's email
+            address (str): Person's address
+            phone (str): Person's phone
+            group (str): Person's group
+            email_set (list): Update Person's email_set
+            address_set (list): Update Person's address_set
+            phone_set (list): Update Person's phone_set
+            group_set (list): Update Person's group_set
         """
         for key, val in kwargs.items():
             if key in ['name', 'last_name']:
@@ -45,30 +60,33 @@ class Person:
 
 class AddressBook(DeBe):
     def __init__(self):
+        """
+
+        """
         self.groups = defaultdict(list)
-        super(AddressBook, self).__init__(['group_set', 'email_set', 'name', 'last_name'])
-        self.indexes['email_set'] = TrieIndex(use_suffix=True)
+        super(AddressBook, self).__init__(
+            prefix_index=['group_set', 'address_set', 'name', 'last_name'],
+            suffix_index=['email_set'])
 
     def add(self, person, pk=None):
+        """
+        Add a Person to address book.
+
+        Args:
+            person (Person): Person object.
+            pk (str, optional): Primary key for person.
+        """
         super(AddressBook, self).add(person, pk)
         for group in person.data['group_set']:
             self.groups[group].append(person.pk)
 
     def create_person(self, **kwargs):
         """
-        Creates a Person object with given parameters,
-        adds it to address book.
-        Args:
-            name (str): Person's name
-            last_name (str): Person's last name
-            email (str): Person's email
-            address (str): Person's address
-            phone (str): Person's phone
-            group (str): Person's group
-            email_set (list): Update Person's email_set
-            address_set (list): Update Person's address_set
-            phone_set (list): Update Person's phone_set
-            group_set (list): Update Person's group_set
+        Shortcut method for creating a Person object with given parameters,
+        then adding it to address book.
+
+        Keyword Args:
+            See Person object.
         Returns:
             Person: Just created Person object
         """
@@ -77,7 +95,12 @@ class AddressBook(DeBe):
         return person
 
     def add_group(self, name):
-        # explicit group creation is not required
+        """Creates a group, but explicit
+        group creation is not required.
+
+        Args:
+            name(str): Name of group
+        """
         self.groups.setdefault(name, {})
 
     def list_groups(self):
@@ -85,14 +108,14 @@ class AddressBook(DeBe):
         Returns:
             list: List of group names
         """
-        return self.groups.keys()
+        return list(self.groups.keys())
 
     def get_group(self, name):
         """
+        Group
         Args:
             name (str): name of group
-
         Returns:
-            list: Person list
+            generator: Members (Person) of given group
         """
-        return self._get_objects_by_ids(self.groups[name])
+        return self._get_objects_by_ids(self.groups[name]) if self.groups[name] else []

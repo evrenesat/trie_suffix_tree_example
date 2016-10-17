@@ -1,11 +1,10 @@
 **An AddressBook library using simple Trie / Suffix Trie indexes**
 
 This project contains a simple in-memory DB implementation using Python data types.
- This is just an example project, which is not suitable for any production need.
- For production needs please use one of the followings:
- 
-    - https://github.com/pytries/DAWG
-    - https://github.com/s-yata/marisa-trie
+This is just an example project, which is not suitable for any production need.
+For production please use one of the followings:
+ * https://github.com/pytries/DAWG
+ * https://github.com/s-yata/marisa-trie
     
 
 
@@ -38,10 +37,12 @@ In [10]: ab.add(p3)
 ***Prefix and substring searches***
 
 By using Trie indexes, all fields supports prefix matching.
- We only using Suffix tire indexing on  email field, 
+ We only use [Suffix tire indexing][1] on  email field, 
  so we can search with substring of an email
+ [1]: https://github.com/evrenesat/trie_suffix_tree_example/blob/master/debe.py#L29
 
-```
+```python
+
 # find_by method works for all fields (name, last_name, email, address, phone)
 # But only "email" field supports substring matching
 In [11]: list(ab.find_by(email='co')) # we need to convert result generator to list

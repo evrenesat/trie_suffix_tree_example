@@ -48,6 +48,12 @@ By using Trie indexes, all fields supports prefix matching.
 In [11]: list(ab.find_by(email='co')) # we need to convert result generator to list
 Out[11]: [fee ['mail@ma.co'], p3 ['p3@p3.com']]
 
+```
+
+***Groups***
+
+```python
+
 # get list of existing groups
 In [12]: ab.list_groups()
 Out[12]: ['work', 'family', 'friend']
@@ -67,3 +73,15 @@ Out[16]: ['work', 'family', 'friend', 'foo']
 
 
 ```
+
+
+***Testing***
+
+You need `pytest` for testing.
+```bash
+
+pip install pytest
+py.test test.py
+```
+
+

@@ -52,9 +52,8 @@ class Person:
                 self.data[key] = val
             else:
                 key_set = '%s_set' % key
-                if key in self.data or key_set in self.data:
-                    if key_set in self.data:
-                        key, val = key_set, [val]
+                if key_set in self.data:
+                    key, val = key_set, [val]
                 self.data[key] = list(set(self.data[key] + val))
 
 
